@@ -13,15 +13,23 @@ RSpec.describe 'Task', type: :system do
         expect(current_path).to eq project_tasks_path(project)
       end
 
-      xit 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
+      it 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
         # FIXME: テストが失敗するので修正してください
         project = FactoryBot.create(:project)
         task = FactoryBot.create(:task, project_id: project.id)
         visit project_path(project)
         click_link 'View Todos'
+        # 全てのタブを取得
+        windows = page.driver.browser.window_handles
+        # 最後に開いたタブに移動=リンククリックで開いたタブ
+        page.driver.browser.switch_to.window(windows.last)
         expect(page).to have_content task.title
         expect(Task.count).to eq 1
         expect(current_path).to eq project_tasks_path(project)
+        # 現在表示中のタブ=リンククリックで開いたタブをクローズ（これをしないとゴミのタブがたまる）
+        page.driver.browser.close
+        # 元いたタブに戻る
+        page.driver.browser.switch_to.window(windows.first)
       end
     end
   end
