@@ -103,7 +103,6 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task削除' do
     let!(:task) { create(:task, project_id: project.id) }
-    # before { create(:task, project_id: project.id) }
 
     context '正常系' do
       # FIXME: テストが失敗するので修正してください
